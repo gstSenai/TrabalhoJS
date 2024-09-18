@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Controle de Dados</title>
+    <link rel="stylesheet" href="src/output.css">
+    <script src="/js/scripts.js" defer></script>
+    <script src="https://code.jscharting.com/latest/jscharting.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bacground">
+    <header class="flex justify-center items-center h-[8rem] shadow-2xl">
+        <p class="text-4xl font-bold p-6 ">PAINEL MÁQUINAS</p>
+    </header>
+
+    <section class="flex items-center justify-center mt-[2rem]">
+        <article class="flex flex-row items-center justify-center gap-[12rem]">
+            <div
+            class="flex flex-col items-center bg-white text-center gap-[1rem] shadow-2xl p-5 rounded-2xl ">
+                <h1 class="font-semibold text-3xl">Maquina 001</h1>
+                <p class="p-[0.5rem] rounded-xl" id="outputDiv1"></p>
+                <p class="text-red-600" id="infoDiv1"></p>
+                <article class="flex flex-row gap-[9rem] mt-[]">
+                    <div class="text-left flex flex-col">
+                        <p class="opacity-50 text-xm">Temperatura ideal:</p>
+                        <p class="opacity-50 text-xm">Velocidade ideal:</p>
+                        <p class="opacity-50 text-xm">Consumo de energia ideal ideal:</p>
+                    </div>
+                    <div class="flex flex-col">
+                        <p class="opacity-50 text-xm">40~53 °C</p>
+                        <p class="opacity-50 text-xm">400~1600 °RPM</p>
+                        <p class="opacity-50 text-xm">40~65 °C</p>
+                    </div>
+                </article>
+                <button id="button1" class="bg-amber-200 text-red-400 rounded-2xl p-3 w-[50%] text-sm font-bold hover:translate-y-1 border-[2px] border-black">Iniciar
+                    atualizar da máquina</button>
+                <div class="flex justify-center">
+                    <div id="chartDiv1" style="width: 500px; height: 300px;"></div>
+                </div>
+            </div>
+            <div
+                class="flex flex-col items-center bg-white text-center gap-[1rem] shadow-2xl p-5 rounded-2xl ">
+                <h1 class="font-semibold text-3xl">Maquina 002</h1>
+                <p class="p-[0.5rem] rounded-xl" id="outputDiv2"></p>
+                <p class="text-red-600" id="infoDiv2"></p>
+                <article class="flex flex-row gap-[9rem]">
+                    <div class="text-left flex flex-col">
+                        <p class="opacity-50 text-xm">Temperatura ideal:</p>
+                        <p class="opacity-50 text-xm">Velocidade ideal:</p>
+                        <p class="opacity-50 text-xm">Consumo de energia ideal ideal:</p>
+                    </div>
+                    <div class="flex flex-col">
+                        <p class="opacity-50 text-xm">40~53 °C</p>
+                        <p class="opacity-50 text-xm">40~65 °C</p>
+                        <p class="opacity-50 text-xm">40~65 °C</p>
+                    </div>
+                </article>
+                <button id="button2" class="bg-amber-200 text-red-400 rounded-2xl p-3 w-[50%] text-sm font-bold hover:translate-y-1 border-[2px] border-black">Iniciar
+                    atualizações da máquina</button>
+                <div class="flex justify-center">
+                    <div id="chartDiv2" style="width: 500px; height: 300px;"></div>
+                </div>
+            </div>
+        </article>
+    </section>
+</body>
+
+</html>
