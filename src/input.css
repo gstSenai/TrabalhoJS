@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-.background{
-    background-color: #00ff00;
+/* Criação do id para a coloração do fundo da página */
+#background{
+    background-color: #d3d3d3;
 }
