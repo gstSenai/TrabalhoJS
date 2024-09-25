@@ -1,93 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel de Controle de Dados</title>
-    <!-- Importação dos arquivos css para a estilização da interface -->
     <link rel="stylesheet" href="src/output.css">
-    <link rel="stylesheet" href="/src/input.css">
-    <!-- Importação do arquivo scripts para a funcionalidade do site -->
+    <link rel="stylesheet" href="src/input.css">
     <script src="/js/scripts.js" defer></script>
-    <!-- importação da biblioteca de geração de gráfico -->
     <script src="https://code.jscharting.com/latest/jscharting.js"></script>
-    <!-- Importação do framework Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<!-- Escopo do projeto, ID importado do input para a coloração da página -->
-
 <body id="background">
-    <!-- Cabeçalho do site -->
     <header class="flex justify-center items-center h-[8rem] shadow-2xl">
         <p class="text-5xl font-bold p-6 ">PAINEL MÁQUINAS</p>
     </header>
-    <!-- // Alinhamento do container no centro da página -->
-    <section class="flex items-center justify-center mt-[2rem]">
-        <!-- // Container principal da interface, onde separa as divisões das interfaces 'máquina' em um espaçamento organizado esteticamente -->
-        <article class="flex flex-row items-center justify-center gap-[12rem]">
-            <!-- // Divisão da interface da máquina 001 -->
+    <section class="flex flex-col items-center justify-center mt-[2rem]">
+        <!-- Botão para criar nova máquina -->
+        <button id="addMachineBtn" class="bg-blue-500 text-white p-3 rounded-lg mb-5">Adicionar Máquina</button>
+
+        <!-- Container onde as máquinas serão adicionadas -->
+        <article id="machinesContainer" class="flex flex-wrap gap-10 justify-center">
+        </article>
+        
+        <!-- Template para máquina -->
+        <template id="machineTemplate">
             <div class="flex flex-col items-center bg-white text-center gap-[1rem] shadow-2xl p-5 rounded-2xl">
-                <h1 class="font-semibold text-3xl">Maquina 001</h1> <!-- // identificação da máquina -->
-                <p id="status-maquina1" class="font-semibold text-xl"></p>
-                <!-- // Importação do status da máquina do arquivo scripts -->
-                <div class="flex flex-row space-x-16"> <!-- // Agrupamento das identificações dos dados -->
-                    <p class="text-xs">Temp.</p>
-                    <p class="text-xs">Vel.</p>
-                    <p class="text-xs">Energia</p>
-                </div>
-                <div class="flex flex-row gap-[2rem]">
-                    <!-- Agrupamento de dados gerados pela máquina importados do arquivo scripts -->
-                    <p class="p-[0.5rem] rounded-xl" id="outputDiv1"></p>
-                    <p class="p-[0.5rem] rounded-xl" id="outputVelo1"></p>
-                    <p class="p-[0.5rem] rounded-xl" id="outputConsu1"></p>
-                </div>
-                <div class="flex flex-col">
-                    <!-- // Agrupamento dos geradores de texto que 'traduzem' o erro da máquina -->
-                    <p class="text-red-600" id="infoDiv1"></p>
-                    <p class="text-red-600" id="infoVelo1"></p>
-                    <p class="text-red-600" id="infoConsu1"></p>
-                </div>
-                <!-- Botão de inicialização da máquina, funcionalidade importada do arquivo scripts -->
-                <button id="button1"
-                    class="bg-amber-200 text-red-400 rounded-2xl p-3 w-[50%] text-sm font-bold hover:translate-y-1 border-[2px] border-black">Iniciar
-                    Atualização da Máquina</button>
-                <!-- Gráfico importado de biblioteca pelo arquivo scripts -->
-                <div class="flex justify-center">
-                    <div id="chartDiv1" style="width: 500px; height: 300px;"></div>
-                </div>
-            </div>
-            <!-- // Divisão da interface da máquina 002 -->
-            <!-- // A estrutura do código se repete igualmente à estrutura da máquina 001, apenas alterando os dados gerados pelo objeto
-                máquina 002. A estrutura se encerra no fim da DIV. -->
-            <div class="flex flex-col items-center bg-white text-center gap-[1rem] shadow-2xl p-5 rounded-2xl">
-                <h1 class="font-semibold text-3xl">Maquina 002</h1>
-                <p id="status-maquina2" class="font-semibold text-xl"></p>
+                <h1 class="font-semibold text-3xl">Maquina <span class="machine-id"></span></h1>
+                <p class="machine-status font-semibold text-xl"></p>
                 <div class="flex flex-row space-x-16">
                     <p class="text-xs">Temp.</p>
                     <p class="text-xs">Vel.</p>
                     <p class="text-xs">Energia</p>
                 </div>
                 <div class="flex flex-row gap-[2rem]">
-                    <p class="p-[0.5rem] rounded-xl" id="outputDiv2"></p>
-                    <p class="p-[0.5rem] rounded-xl" id="outputVelo2"></p>
-                    <p class="p-[0.5rem] rounded-xl" id="outputConsu2"></p>
+                    <p class="p-[0.5rem] rounded-xl machine-temp"></p>
+                    <p class="p-[0.5rem] rounded-xl machine-vel"></p>
+                    <p class="p-[0.5rem] rounded-xl machine-energia"></p>
                 </div>
                 <div class="flex flex-col">
-                    <p class="text-red-600" id="infoDiv2"></p>
-                    <p class="text-red-600" id="infoVelo2"></p>
-                    <p class="text-red-600" id="infoConsu2"></p>
+                    <p class="text-red-600 machine-temp-erro"></p>
+                    <p class="text-red-600 machine-vel-erro"></p>
+                    <p class="text-red-600 machine-energia-erro"></p>
                 </div>
-
-                <button id="button2"
-                    class="bg-amber-200 text-red-400 rounded-2xl p-3 w-[50%] text-sm font-bold hover:translate-y-1 border-[2px] border-black">Iniciar
-                    Atualizações da Máquina</button>
+                <button class="bg-amber-200 text-red-400 rounded-2xl p-3 w-[50%] text-sm font-bold hover:translate-y-1 border-[2px] border-black start-btn">Iniciar Atualização da Máquina</button>
                 <div class="flex justify-center">
-                    <div id="chartDiv2" style="width: 500px; height: 300px;"></div>
+                    <div class="machine-chart" style="width: 500px; height: 300px;"></div>
                 </div>
             </div>
-        </article>
+        </template>
     </section>
 </body>
-
 </html>

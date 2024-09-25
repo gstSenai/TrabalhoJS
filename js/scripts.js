@@ -1,19 +1,78 @@
+class Servidor {
+    informacaoTemperatura(temperatura, infoDiv, velocidade, infoVel, consumoEnergia, infoCons) {
+        // Verificação e exibição de erros
+        if (infoDiv) {
+            if (temperatura > 58) {
+                infoDiv.innerHTML = "⚠️ ERRO: TEMPERATURA ACIMA DO NORMAL";
+                infoDiv.style.color = "red"; 
+            } else {
+                infoDiv.innerHTML = "";  
+            }
+        }
 
-// Criação da classe Maquina
+        if (infoVel) {
+            if (velocidade > 58) {
+                infoVel.innerHTML = "⚠️ ERRO: VELOCIDADE ACIMA DO NORMAL";
+                infoVel.style.color = "red";
+            } else {
+                infoVel.innerHTML = "";
+            }
+        }
+
+        if (infoCons) {
+            if (consumoEnergia > 58) {
+                infoCons.innerHTML = "⚠️ ERRO: CONSUMO DE ENERGIA ACIMA DO NORMAL";
+                infoCons.style.color = "red";
+            } else {
+                infoCons.innerHTML = "";
+            }
+        }
+    }
+
+    verificarEstado(maquinas) {
+        let algumaFalha = false;
+        for (let maquina of maquinas) {
+            if (maquina.temperatura > 58) {
+                algumaFalha = true;
+                
+            }if(maquina.velocidade > 58){
+                algumaFalha = true;
+            }if(maquina.consumoEnergia > 58){
+                algumaFalha = true;
+            }
+        }
+        if (algumaFalha == true) {
+            maquinas.forEach(m => m.pararAtualizacao());
+        }
+    }
+
+    atualizar(maquina, maquinas) {
+        this.informacaoTemperatura(
+            maquina.temperatura,
+            maquina.infoTemp,
+            maquina.velocidade,
+            maquina.infoVelo,
+            maquina.consumoEnergia,
+            maquina.infoConsumo
+        );
+        this.verificarEstado(maquinas);
+    }
+}
+
 class Maquina {
-    // Criação do método construtor com os atributos que vão ser exibidos
-    constructor(id, chartDivId, outputDivId, infoDivId, outputVelo, infoVelo, outputConsu, infoConsu) {
+    constructor(id, chartDiv, outputTemp, outputVelo, outputConsumo, infoTemp, infoVelo, infoConsumo, statusDiv) {
         this.id = id;
-        this.chartDivId = chartDivId;
-        this.outputDivId = outputDivId;
-        this.infoDivId = infoDivId;
+        this.chartDiv = chartDiv;
+        this.outputTemp = outputTemp;
         this.outputVelo = outputVelo;
-        this.outputConsu = outputConsu;
+        this.outputConsumo = outputConsumo;
+        this.infoTemp = infoTemp;
         this.infoVelo = infoVelo;
-        this.infoConsu = infoConsu;
-        this.statusDivId = `status-${id}`;
-        // Criação do Grafico para verificação do histórico
-        this.chart = new JSC.Chart(this.chartDivId, {
+        this.infoConsumo = infoConsumo;
+        this.statusDiv = statusDiv;
+        this.observers = [];
+
+        this.chart = new JSC.Chart(this.chartDiv, {
             xAxis: { scale_type: "time" },
             series: [
                 { name: "Temperatura", points: [], color: "red" },
@@ -21,98 +80,56 @@ class Maquina {
                 { name: "Consumo de Energia", points: [], color: "green" }
             ]
         });
+
         this.idInterval = null;
-        // Armazenamento dos incritos para receber as notificações
-        this.servers = [];
+        this.temperatura = 0;
+        this.velocidade = 0;
+        this.consumoEnergia = 0;
     }
 
-    // Adicionar um incrito para receber as notificações da maquina
-    adicionarServers(server) {
-        this.servers.push(server);
+    adicionarObservador(observer) {
+        this.observers.push(observer);
     }
 
-    // Remover o incrito para deixar de receber as notificaçõe, por posição especifica
-    removerServers(server) {
-        this.servers = this.servers.filter(obs => obs !== server);
+    notificarObservadores() {
+        this.observers.forEach(observer => observer.atualizar(this, this.observers));
     }
 
-    // Notifica os incritos da maquina
-    notificarServers(temperatura, velocidade, consumoEnergia) {
-        this.servers.forEach(server => server.informacaoTemperatura(
-            temperatura, this.infoDivId, 
-            velocidade, this.infoVelo, 
-            consumoEnergia, this.infoConsu
-        ));
-    }
-
-    // Aqui é feito a Atualização da temperatura
     atualizarTemperatura() {
-        let temperatura = getRandomValor(40, 60);// Criação do Atributo em que gera uma temperatura
-        let velocidade = getRandomValor(40, 60);// Criação do Atributo em que gera uma Velocidade
-        let consumoEnergia = getRandomValor(40, 60);// Criação do Atributo em que gera um Consumo de enegia
+        this.temperatura = getRandomValor(40, 60);
+        this.velocidade = getRandomValor(40, 60);
+        this.consumoEnergia = getRandomValor(40, 60);
 
-        this.chart.series(0).points.add({ x: new Date(), y: temperatura }); // Criação dos intens que vão ter dento do meu grafico que é Temperatura e data que foi gerada essa temperatura
-        this.chart.series(1).points.add({ x: new Date(), y: velocidade }); // Criação dos intens que vão ter dento do meu grafico que é Velocidade e data que foi gerada essa temperatura
-        this.chart.series(2).points.add({ x: new Date(), y: consumoEnergia }); // Criação dos intens que vão ter dento do meu grafico que é Consumo de Energia e data que foi gerada essa temperatura
+        this.chart.series(0).points.add({ x: new Date(), y: this.temperatura });
+        this.chart.series(1).points.add({ x: new Date(), y: this.velocidade });
+        this.chart.series(2).points.add({ x: new Date(), y: this.consumoEnergia });
 
-        // Criação dos atributos no HTMl(Velocidade, Velocidade, Consumo de Energia)
-        const outputDiv = document.getElementById(this.outputDivId);
-        outputDiv.innerHTML = Math.ceil(temperatura) + "ºC";
-        const outputVel = document.getElementById(this.outputVelo);
-        outputVel.innerHTML = Math.ceil(velocidade) + " RPM";
-        const outputConsu = document.getElementById(this.outputConsu);
-        outputConsu.innerHTML = Math.ceil(consumoEnergia) + " kW";
+        this.outputTemp.innerHTML = Math.ceil(this.temperatura) + "ºC";
+        this.outputVelo.innerHTML = Math.ceil(this.velocidade) + " RPM";
+        this.outputConsumo.innerHTML = Math.ceil(this.consumoEnergia) + " kW";
 
-        // Condições para parar a operação da Maquina 
-        if (temperatura > 58) {
-            outputDiv.style.backgroundColor = "Red";
-            outputDiv.style.color = "White";
+        this.outputTemp.style.backgroundColor = this.temperatura > 58 ? "Red" : "White";
+        this.outputTemp.style.color = this.temperatura > 58 ? "White" : "Black";
+        if (this.temperatura > 58) {
             this.pararAtualizacao();
-        } else {
-            outputDiv.style.color = "Black";
-            outputDiv.style.backgroundColor = "White";
         }
 
-        if (velocidade > 58) {
-            outputVel.style.backgroundColor = "Red";
-            outputVel.style.color = "White";
+        this.outputVelo.style.backgroundColor = this.velocidade > 58 ? "Red" : "White";
+        this.outputVelo.style.color = this.velocidade > 58 ? "White" : "Black";
+        if (this.velocidade > 58) {
             this.pararAtualizacao();
-        } else {
-            outputVel.style.color = "Black";
-            outputVel.style.backgroundColor = "White";
         }
 
-        if (consumoEnergia > 58) {
-            outputConsu.style.backgroundColor = "Red";
-            outputConsu.style.color = "White";
+        this.outputConsumo.style.backgroundColor = this.consumoEnergia > 58 ? "Red" : "White";
+        this.outputConsumo.style.color = this.consumoEnergia > 58 ? "White" : "Black";
+        if (this.consumoEnergia > 58) {
             this.pararAtualizacao();
-        } else {
-            outputConsu.style.color = "Black";
-            outputConsu.style.backgroundColor = "White";
         }
 
-        // Atualizar a notificação para os servidores
-        this.notificarServers(temperatura, velocidade, consumoEnergia);
-        // Atualizar o status da maquina se está desligada ou ligada
         this.atualizarStatus();
+        this.notificarObservadores();
     }
 
-    // Método para atualizar os status das maquinas
-    atualizarStatus() {
-        const statusDiv = document.getElementById(this.statusDivId);
-        // Condição para exir a mensagem no html de ligada ou desligada  
-        if (statusDiv) {
-            if (this.idInterval) {
-                statusDiv.innerHTML = "Máquina está ligada";
-                statusDiv.style.color = "green";
-            } else {
-                statusDiv.innerHTML = "Máquina está desligada";
-                statusDiv.style.color = "red";
-            }
-        }
-    }
-
-    // Um método para definir o tempo que vai demorar para atualizar a temperatura e começar a atualizar
     iniciarAtualizacao() {
         if (this.idInterval === null) {
             this.idInterval = setInterval(() => this.atualizarTemperatura(), 2000);
@@ -120,7 +137,6 @@ class Maquina {
         }
     }
 
-    // Método para quando der algum erro ele ativar este Método
     pararAtualizacao() {
         if (this.idInterval) {
             clearInterval(this.idInterval);
@@ -128,71 +144,47 @@ class Maquina {
             this.atualizarStatus();
         }
     }
-}
 
-// Classe que representa um servidor que monitora condições de temperatura, velocidade e consumo de energia
-class Servidor {
-    // Método que recebe dados de temperatura, velocidade e consumo de energia, e atualiza a interface do usuário
-    informacaoTemperatura(temperatura, infoDivId, velocidade, infoVelo, consumoEnergia, infoConsu) {
-        // Obtém elementos HTML pelos IDs fornecidos
-        const infoDiv = document.getElementById(infoDivId);
-        const infoVel = document.getElementById(infoVelo);
-        const infoCons = document.getElementById(infoConsu);
-
-        // Verifica se a temperatura está acima do limite
-        if (temperatura > 58) {
-            infoDiv.innerHTML = "⚠️ ERRO: TEMPERATURA ACIMA DO NORMAL"; // Exibe mensagem de erro
-        } else {
-            infoDiv.innerHTML = ""; // Limpa a mensagem de erro se a temperatura estiver normal
-        }
-
-        // Verifica se a velocidade está acima do limite
-        if (velocidade > 58) {
-            infoVel.innerHTML = "⚠️ ERRO: VELOCIDADE ACIMA DO NORMAL"; // Exibe mensagem de erro
-        } else {
-            infoVel.innerHTML = ""; // Limpa a mensagem de erro se a velocidade estiver normal
-        }
-
-        // Verifica se o consumo de energia está acima do limite
-        if (consumoEnergia > 58) {
-            infoCons.innerHTML = "⚠️ ERRO: CONSUMO DE ENERGIA ACIMA DO NORMAL"; // Exibe mensagem de erro
-        } else {
-            infoCons.innerHTML = ""; // Limpa a mensagem de erro se o consumo de energia estiver normal
-        }
+    atualizarStatus() {
+        this.statusDiv.innerHTML = this.idInterval ? "Máquina está ligada" : "Máquina está desligada";
+        this.statusDiv.style.color = this.idInterval ? "green" : "red";
     }
 }
 
-// Função que gera um valor aleatório entre um mínimo e um máximo especificados
-function getRandomValor(min, max) {
-    return Math.random() * (max - min) + min; // Retorna um valor aleatório
+function adicionarMaquina() {
+    const template = document.querySelector('#machineTemplate').content;
+    const container = document.querySelector('#machinesContainer');
+    const clone = template.cloneNode(true);
+    const id = `00${document.querySelectorAll('.machine-id').length + 1}`;
+
+    clone.querySelector('.machine-id').textContent = id;
+    const statusDiv = clone.querySelector('.machine-status');
+    const outputTemp = clone.querySelector('.machine-temp');
+    const outputVelo = clone.querySelector('.machine-vel');
+    const outputConsumo = clone.querySelector('.machine-energia');
+    const infoTemp = clone.querySelector('.machine-temp-erro');
+    const infoVelo = clone.querySelector('.machine-vel-erro');
+    const infoConsumo = clone.querySelector('.machine-energia-erro');
+    const chartDiv = clone.querySelector('.machine-chart');
+    const startBtn = clone.querySelector('.start-btn');
+
+    container.appendChild(clone);
+
+    const maquina = new Maquina(
+        id, chartDiv, outputTemp, outputVelo, outputConsumo, infoTemp, infoVelo, infoConsumo, statusDiv
+    );
+
+    maquina.adicionarObservador(servidor);
+
+    startBtn.addEventListener('click', () => {
+        maquina.iniciarAtualizacao();
+    });
 }
 
-// Cria duas instâncias da classe Servidor
-const servidor1 = new Servidor();
-const servidor2 = new Servidor();
+document.querySelector('#addMachineBtn').addEventListener('click', adicionarMaquina);
 
-// Cria uma instância da classe Maquina chamada 'maquina1' com IDs para os elementos da interface
-const maquina1 = new Maquina('maquina1', 'chartDiv1', 'outputDiv1', 'infoDiv1', 'outputVelo1', 'infoVelo1', 'outputConsu1', 'infoConsu1');
+function getRandomValor(min, max) {
+    return Math.random() * (max - min) + min;
+}
 
-// Adiciona os servidores à máquina 1
-maquina1.adicionarServers(servidor1);
-maquina1.adicionarServers(servidor2);
-
-// Seleciona o botão com ID 'button1' e adiciona um evento de clique para iniciar a atualização da máquina 1
-const btn1 = document.querySelector("#button1");
-btn1.addEventListener("click", function () {
-    maquina1.iniciarAtualizacao(); // Inicia a atualização da máquina 1 quando o botão é clicado
-});
-
-// Cria uma instância da classe Maquina chamada 'maquina2' com IDs para os elementos da interface
-const maquina2 = new Maquina('maquina2', 'chartDiv2', 'outputDiv2', 'infoDiv2', 'outputVelo2', 'infoVelo2', 'outputConsu2', 'infoConsu2');
-
-// Adiciona o servidor 1 à máquina 2
-maquina2.adicionarServers(servidor1);
-
-// Seleciona o botão com ID 'button2' e adiciona um evento de clique para iniciar a atualização da máquina 2
-const btn2 = document.querySelector("#button2");
-btn2.addEventListener("click", function () {
-    maquina2.iniciarAtualizacao(); // Inicia a atualização da máquina 2 quando o botão é clicado
-});
-
+const servidor = new Servidor();
