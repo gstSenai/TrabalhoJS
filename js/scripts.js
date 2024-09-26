@@ -1,68 +1,4 @@
-class Servidor {
-    // Método responsável por verificar e exibir erros de temperatura, velocidade e consumo de energia
-    informacaoTemperatura(temperatura, infoDiv, velocidade, infoVel, consumoEnergia, infoCons) {
-        // Verifica se a temperatura está acima do limite e exibe o erro
-        if (infoDiv) {
-            if (temperatura > 58) {
-                infoDiv.innerHTML = "⚠️ ERRO: TEMPERATURA ACIMA DO NORMAL";
-                infoDiv.style.color = "red"; 
-            } else {
-                infoDiv.innerHTML = "";  
-            }
-        }
 
-        // Verifica se a velocidade está acima do limite e exibe o erro
-        if (infoVel) {
-            if (velocidade > 58) {
-                infoVel.innerHTML = "⚠️ ERRO: VELOCIDADE ACIMA DO NORMAL";
-                infoVel.style.color = "red";
-            } else {
-                infoVel.innerHTML = "";
-            }
-        }
-
-        // Verifica se o consumo de energia está acima do limite e exibe o erro
-        if (infoCons) {
-            if (consumoEnergia > 58) {
-                infoCons.innerHTML = "⚠️ ERRO: CONSUMO DE ENERGIA ACIMA DO NORMAL";
-                infoCons.style.color = "red";
-            } else {
-                infoCons.innerHTML = "";
-            }
-        }
-    }
-
-    // Método para verificar o estado de todas as máquinas e parar caso alguma apresente erro
-    verificarEstado(maquinas) {
-        let algumaFalha = false;
-        for (let maquina of maquinas) {
-            // Se a temperatura, velocidade ou consumo de energia de qualquer máquina estiver acima do limite
-            if (maquina.temperatura > 58 || maquina.velocidade > 58 || maquina.consumoEnergia > 58) {
-                algumaFalha = true;
-            }
-        }
-
-        // Se qualquer máquina falhou, todas param de atualizar
-        if (algumaFalha == true) {
-            maquinas.forEach(m => m.pararAtualizacao());
-        }
-    }
-
-    // Método para atualizar os valores da máquina e verificar o estado das outras máquinas
-    atualizar(maquina, maquinas) {
-        // Atualiza a exibição de temperatura, velocidade e consumo
-        this.informacaoTemperatura(
-            maquina.temperatura,
-            maquina.infoTemp,
-            maquina.velocidade,
-            maquina.infoVelo,
-            maquina.consumoEnergia,
-            maquina.infoConsumo
-        );
-        // Verifica o estado geral das máquinas
-        this.verificarEstado(maquinas);
-    }
-}
 
 class Maquina {
     // Construtor da classe Máquina, inicializando seus componentes e observadores
@@ -169,6 +105,72 @@ class Maquina {
     }
 }
 
+class Servidor {
+    // Método responsável por verificar e exibir erros de temperatura, velocidade e consumo de energia
+    informacaoTemperatura(temperatura, infoDiv, velocidade, infoVel, consumoEnergia, infoCons) {
+        // Verifica se a temperatura está acima do limite e exibe o erro
+        if (infoDiv) {
+            if (temperatura > 58) {
+                infoDiv.innerHTML = "⚠️ ERRO: TEMPERATURA ACIMA DO NORMAL";
+                infoDiv.style.color = "red"; 
+            } else {
+                infoDiv.innerHTML = "";  
+            }
+        }
+
+        // Verifica se a velocidade está acima do limite e exibe o erro
+        if (infoVel) {
+            if (velocidade > 58) {
+                infoVel.innerHTML = "⚠️ ERRO: VELOCIDADE ACIMA DO NORMAL";
+                infoVel.style.color = "red";
+            } else {
+                infoVel.innerHTML = "";
+            }
+        }
+
+        // Verifica se o consumo de energia está acima do limite e exibe o erro
+        if (infoCons) {
+            if (consumoEnergia > 58) {
+                infoCons.innerHTML = "⚠️ ERRO: CONSUMO DE ENERGIA ACIMA DO NORMAL";
+                infoCons.style.color = "red";
+            } else {
+                infoCons.innerHTML = "";
+            }
+        }
+    }
+
+    // Método para verificar o estado de todas as máquinas e parar caso alguma apresente erro
+    verificarEstado(maquinas) {
+        let algumaFalha = false;
+        for (let maquina of maquinas) {
+            // Se a temperatura, velocidade ou consumo de energia de qualquer máquina estiver acima do limite
+            if (maquina.temperatura > 58 || maquina.velocidade > 58 || maquina.consumoEnergia > 58) {
+                algumaFalha = true;
+            }
+        }
+
+        // Se qualquer máquina falhou, todas param de atualizar
+        if (algumaFalha == true) {
+            maquinas.forEach(m => m.pararAtualizacao());
+        }
+    }
+
+    // Método para atualizar os valores da máquina e verificar o estado das outras máquinas
+    atualizar(maquina, maquinas) {
+        // Atualiza a exibição de temperatura, velocidade e consumo
+        this.informacaoTemperatura(
+            maquina.temperatura,
+            maquina.infoTemp,
+            maquina.velocidade,
+            maquina.infoVelo,
+            maquina.consumoEnergia,
+            maquina.infoConsumo
+        );
+        // Verifica o estado geral das máquinas
+        this.verificarEstado(maquinas);
+    }
+}
+
 // Função para adicionar uma nova máquina ao sistema
 function adicionarMaquina() {
     // Obtém o template e o container de máquinas
@@ -218,4 +220,4 @@ const servidor = new Servidor();
 
 // Adiciona um evento ao botão de adicionar máquina
 document.querySelector('#addMachineBtn').addEventListener('click', adicionarMaquina);
- 
+            
