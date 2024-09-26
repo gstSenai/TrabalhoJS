@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,23 +11,37 @@
     <script src="https://code.jscharting.com/latest/jscharting.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
 <body id="background">
     <header class="flex justify-center items-center h-[8rem] shadow-2xl">
-        <p class="text-5xl font-bold p-6 ">PAINEL MÁQUINAS</p>
+        <p class="text-5xl font-bold p-6">PAINEL MÁQUINAS</p>
     </header>
     <section class="flex flex-col items-center justify-center mt-[2rem]">
-        <!-- Botão para criar nova máquina -->
+        <select id="funcionario-select" class="mb-5 rounded-lg">
+            <option value="">Selecione um Funcionário</option>
+            <option value="Funcionario1">Funcionário 1</option>
+            <option value="Funcionario2">Funcionário 2</option>
+            <option value="Funcionario3">Funcionário 3</option>
+        </select>
         <button id="addMachineBtn" class="bg-blue-500 text-white p-3 rounded-lg mb-5">Adicionar Máquina</button>
 
         <!-- Container onde as máquinas serão adicionadas -->
-        <article id="machinesContainer" class="flex flex-wrap gap-10 justify-center">
-        </article>
-        
+        <article id="machinesContainer" class="flex flex-wrap gap-10 justify-center "></article>
+
+        <!-- Área para notificações -->
+        <div
+            class="mt-6 w-[50%] flex-col h-auto bg-white p-4 rounded-lg g-5 shadow-lg justify-center flex text-red-400">
+            <div id="notificationContainer">
+
+            </div>
+        </div>
+
         <!-- Template para máquina -->
         <template id="machineTemplate">
             <div class="flex flex-col items-center bg-white text-center gap-[1rem] shadow-2xl p-5 rounded-2xl">
-                <h1 class="font-semibold text-3xl">Maquina <span class="machine-id"></span></h1>
+                <h1 class="font-semibold text-3xl">Máquina <span class="machine-id"></span></h1>
                 <p class="machine-status font-semibold text-xl"></p>
+
                 <div class="flex flex-row space-x-16">
                     <p class="text-xs">Temp.</p>
                     <p class="text-xs">Vel.</p>
@@ -42,7 +57,10 @@
                     <p class="text-red-600 machine-vel-erro"></p>
                     <p class="text-red-600 machine-energia-erro"></p>
                 </div>
-                <button class="bg-amber-200 text-red-400 rounded-2xl p-3 w-[50%] text-sm font-bold hover:translate-y-1 border-[2px] border-black start-btn">Iniciar Atualização da Máquina</button>
+                <button
+                    class="bg-amber-200 text-red-400 rounded-2xl p-3 w-[50%] text-sm font-bold hover:translate-y-1 border-[2px] border-black start-btn">
+                    Iniciar Atualização da Máquina
+                </button>
                 <div class="flex justify-center">
                     <div class="machine-chart" style="width: 500px; height: 300px;"></div>
                 </div>
@@ -50,4 +68,5 @@
         </template>
     </section>
 </body>
+
 </html>
