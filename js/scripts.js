@@ -1,5 +1,4 @@
 
-
 class Maquina {
     // Construtor da classe Máquina, inicializando seus componentes e observadores
     constructor(id, chartDiv, outputTemp, outputVelo, outputConsumo, infoTemp, infoVelo, infoConsumo, statusDiv) {
@@ -13,7 +12,6 @@ class Maquina {
         this.infoConsumo = infoConsumo;
         this.statusDiv = statusDiv;
         this.observers = [];
-
         // Configura o gráfico para exibir os dados da máquina
         this.chart = new JSC.Chart(this.chartDiv, {
             xAxis: { scale_type: "time" },
@@ -23,11 +21,7 @@ class Maquina {
                 { name: "Consumo de Energia", points: [], color: "green" }
             ]
         });
-
         this.idInterval = null;
-        this.temperatura = 0;
-        this.velocidade = 0;
-        this.consumoEnergia = 0;
     }
 
     // Método para adicionar observadores (servidor, por exemplo) à máquina
@@ -138,25 +132,8 @@ class Servidor {
             }
         }
     }
-
-    // Método para verificar o estado de todas as máquinas e parar caso alguma apresente erro
-    verificarEstado(maquinas) {
-        let algumaFalha = false;
-        for (let maquina of maquinas) {
-            // Se a temperatura, velocidade ou consumo de energia de qualquer máquina estiver acima do limite
-            if (maquina.temperatura > 58 || maquina.velocidade > 58 || maquina.consumoEnergia > 58) {
-                algumaFalha = true;
-            }
-        }
-
-        // Se qualquer máquina falhou, todas param de atualizar
-        if (algumaFalha == true) {
-            maquinas.forEach(m => m.pararAtualizacao());
-        }
-    }
-
     // Método para atualizar os valores da máquina e verificar o estado das outras máquinas
-    atualizar(maquina, maquinas) {
+    atualizar(maquina) {
         // Atualiza a exibição de temperatura, velocidade e consumo
         this.informacaoTemperatura(
             maquina.temperatura,
@@ -167,7 +144,6 @@ class Servidor {
             maquina.infoConsumo
         );
         // Verifica o estado geral das máquinas
-        this.verificarEstado(maquinas);
     }
 }
 
@@ -197,9 +173,7 @@ function adicionarMaquina() {
     container.appendChild(clone);
 
     // Cria uma nova instância da máquina
-    const maquina = new Maquina(
-        id, chartDiv, outputTemp, outputVelo, outputConsumo, infoTemp, infoVelo, infoConsumo, statusDiv
-    );
+    const maquina = new Maquina(id, chartDiv, outputTemp, outputVelo, outputConsumo, infoTemp, infoVelo, infoConsumo, statusDiv);
 
     // Adiciona o servidor como observador da máquina
     maquina.adicionarObservador(servidor);
