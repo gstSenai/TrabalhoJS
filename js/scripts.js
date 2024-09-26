@@ -1,13 +1,10 @@
 class Maquina {
-    constructor(id, chartDiv, outputTemp, outputVelo, outputConsumo, infoTemp, infoVelo, infoConsumo, statusDiv) {
+    constructor(id, chartDiv, outputTemp, outputVelo, outputConsumo, statusDiv) {
         this.id = id; // Identificador da máquina
         this.chartDiv = chartDiv; // Elemento onde o gráfico será renderizado
         this.outputTemp = outputTemp; // Elemento para exibir a temperatura
         this.outputVelo = outputVelo; // Elemento para exibir a velocidade
         this.outputConsumo = outputConsumo; // Elemento para exibir o consumo de energia
-        this.infoTemp = infoTemp; // Informações sobre temperatura (não utilizado no código fornecido)
-        this.infoVelo = infoVelo; // Informações sobre velocidade (não utilizado no código fornecido)
-        this.infoConsumo = infoConsumo; // Informações sobre consumo (não utilizado no código fornecido)
         this.statusDiv = statusDiv; // Elemento para exibir o status da máquina
         this.observers = []; // Array para armazenar observadores
         this.chart = new JSC.Chart(this.chartDiv, { // Inicializa o gráfico
@@ -130,7 +127,6 @@ class Funcionario {
         } else if (maquina.consumoEnergia <= 58) {
             this.notificacaoEnviada.consumoEnergia = false; // Resetar notificação
         }
-
         // Adiciona a notificação ao container apenas se houver mensagens
         if (notificationMessage) {
             const notificationElement = document.createElement('div');
@@ -140,7 +136,6 @@ class Funcionario {
             notificationContainer.appendChild(notificationElement);
         }
     }
-
     atualizar(maquina) {
         this.receberNotificacao(maquina);
     }
@@ -171,15 +166,12 @@ function adicionarMaquina() {
     const outputTemp = clone.querySelector('.machine-temp');
     const outputVelo = clone.querySelector('.machine-vel');
     const outputConsumo = clone.querySelector('.machine-energia');
-    const infoTemp = clone.querySelector('.machine-temp-erro');
-    const infoVelo = clone.querySelector('.machine-vel-erro');
-    const infoConsumo = clone.querySelector('.machine-energia-erro');
     const chartDiv = clone.querySelector('.machine-chart');
     const startBtn = clone.querySelector('.start-btn');
 
     container.appendChild(clone);
 
-    const maquina = new Maquina(id, chartDiv, outputTemp, outputVelo, outputConsumo, infoTemp, infoVelo, infoConsumo, statusDiv);
+    const maquina = new Maquina(id, chartDiv, outputTemp, outputVelo, outputConsumo, statusDiv);
 
     // Selecionar funcionário com base no dropdown
     const selectFuncionario = document.getElementById('funcionario-select');
@@ -189,11 +181,10 @@ function adicionarMaquina() {
     if (funcionarioResponsavel) {
         maquina.adicionarObservador(funcionarioResponsavel);
     }
+
     startBtn.addEventListener('click', () => {
         maquina.iniciarAtualizacao();
-        console.log(`Atualização iniciada para a máquina ${id}`);
     });
 }
-
 // Associar a função ao botão de adicionar máquina
 document.getElementById('addMachineBtn').addEventListener('click', adicionarMaquina);

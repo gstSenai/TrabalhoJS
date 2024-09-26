@@ -17,14 +17,13 @@
         <p class="text-5xl font-bold p-6">PAINEL MÁQUINAS</p>
     </header>
     <section class="flex flex-col items-center justify-center mt-[2rem]">
-        <select id="funcionario-select" class="mb-5 rounded-lg">
+        <select id="funcionario-select" class="mb-5 rounded-md">
             <option value="">Selecione um Funcionário</option>
             <option value="Funcionario1">Funcionário 1</option>
             <option value="Funcionario2">Funcionário 2</option>
             <option value="Funcionario3">Funcionário 3</option>
         </select>
         <button id="addMachineBtn" class="bg-blue-500 text-white p-3 rounded-lg mb-5">Adicionar Máquina</button>
-
         <!-- Container onde as máquinas serão adicionadas -->
         <article id="machinesContainer" class="flex flex-wrap gap-10 justify-center "></article>
 
@@ -35,7 +34,6 @@
 
             </div>
         </div>
-
         <!-- Template para máquina -->
         <template id="machineTemplate">
             <div class="flex flex-col items-center bg-white text-center gap-[1rem] shadow-2xl p-5 rounded-2xl">
@@ -51,11 +49,6 @@
                     <p class="p-[0.5rem] rounded-xl machine-temp"></p>
                     <p class="p-[0.5rem] rounded-xl machine-vel"></p>
                     <p class="p-[0.5rem] rounded-xl machine-energia"></p>
-                </div>
-                <div class="flex flex-col">
-                    <p class="text-red-600 machine-temp-erro"></p>
-                    <p class="text-red-600 machine-vel-erro"></p>
-                    <p class="text-red-600 machine-energia-erro"></p>
                 </div>
                 <button
                     class="bg-amber-200 text-red-400 rounded-2xl p-3 w-[50%] text-sm font-bold hover:translate-y-1 border-[2px] border-black start-btn">
