@@ -10,20 +10,48 @@
     <script src="/js/scripts.js" defer></script>
     <script src="https://code.jscharting.com/latest/jscharting.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        .custom-select option:hover {
+            background-color: #ffa1d8;
+        }
+
+        .custom-select option:checked {
+            background-color: #ffa1d8;
+            color: black;
+        }
+    </style>
 </head>
 
 <body id="background">
     <header class="flex justify-center items-center h-[8rem] shadow-2xl">
         <p class="text-5xl font-bold p-6">PAINEL MÁQUINAS</p>
     </header>
-    <section class="flex flex-col items-center justify-center mt-[2rem]">
-        <select id="funcionario-select" class="mb-5 rounded-md">
-            <option value="">Selecione um Funcionário</option>
+    <section class="flex flex-col items-center justify-center mt-[2rem] backgroundPainel w-[80%] m-auto p-[2rem] rounded-[40px] shadow-2xl ">
+        <select id="funcionario-select"
+            class="mb-5 backgroundBottom rounded-[8px] h-[3rem] w-[17rem] flex text-white font-semibold">
+            <option value="">SELECIONE UM FUNCIONÁRIO</option>
             <option value="Funcionario1">Funcionário 1</option>
             <option value="Funcionario2">Funcionário 2</option>
             <option value="Funcionario3">Funcionário 3</option>
         </select>
-        <button id="addMachineBtn" class="bg-blue-500 text-white p-3 rounded-lg mb-5">Adicionar Máquina</button>
+
+        <form>
+            <input id="machineName" name="name" autocomplete="off" required />
+            <label for="name">
+                <span id="buttonName" class="text-[17px] font-semibold">NAME</span>
+            </label>
+        </form>
+        <div class="w-1/3">
+            <select id="atributo-select" class="mt-5 custom-select multiple h-[5.5rem] w-full p-2 border border-gray-300 rounded-md bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" multiple>
+                <option value="Temperatura">Temperatura</option>
+                <option value="Velocidade">Velocidade</option>
+                <option value="Energia">Consumo de Energia</option>
+            </select>
+        </div>
+        <button id="addMachineBtn"
+            class="font-semibold text-white p-3 rounded-[8px] mb-5 mt-5 backgroundBottomMaquina shadow-lg transition-all duration-300 transform hover:scale-110 hover:shadow-2xl">Adicionar
+            Máquina</button>
         <!-- Container onde as máquinas serão adicionadas -->
         <article id="machinesContainer" class="flex flex-wrap gap-10 justify-center "></article>
 
@@ -37,7 +65,7 @@
         <!-- Template para máquina -->
         <template id="machineTemplate">
             <div class="flex flex-col items-center bg-white text-center gap-[1rem] shadow-2xl p-5 rounded-2xl">
-                <h1 class="font-semibold text-3xl">Máquina <span class="machine-id"></span></h1>
+                <h1 class="font-semibold text-3xl machine-id"></h1>
                 <p class="machine-status font-semibold text-xl"></p>
 
                 <div class="flex flex-row space-x-16">
@@ -45,7 +73,7 @@
                     <p class="text-xs">Vel.</p>
                     <p class="text-xs">Energia</p>
                 </div>
-                <div class="flex flex-row gap-[2rem]">
+                <div class="flex flex-row gap-[3.7rem]">
                     <p class="p-[0.5rem] rounded-xl machine-temp"></p>
                     <p class="p-[0.5rem] rounded-xl machine-vel"></p>
                     <p class="p-[0.5rem] rounded-xl machine-energia"></p>
