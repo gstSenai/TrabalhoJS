@@ -12,14 +12,51 @@
     <script src="https://cdn.tailwindcss.com"></script>
 
     <style>
-        .custom-select option:hover {
-            background-color: #ffa1d8;
+        .custom-select {
+            background-color: #f9f9f9;
+            color: #333;
+            font-size: 16px;
+            padding: 12px;
+            border: 2px solid #007bff;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 300px;
+            appearance: none;
+            cursor: pointer;
+            position: relative;
+            height: 20px; 
         }
 
-        .custom-select option:checked {
-            background-color: #ffa1d8;
-            color: black;
+        .custom-select::after {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
         }
+
+        .custom-select:focus {
+            border-color: #0056b3;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+            outline: none;
+        }
+
+        .custom-select option {
+            padding: 10px;
+            background-color: #fff;
+        }
+
+        .custom-select .placeholder {
+            color: #999;
+        }
+
+        /* Estilo para os itens selecionados */
+        .custom-select option:checked {
+            background-color: #007bff;
+            color: white;
+        }
+
+        
     </style>
 </head>
 
@@ -27,7 +64,7 @@
     <header class="flex justify-center items-center h-[8rem] shadow-2xl">
         <p class="text-5xl font-bold p-6">PAINEL MÁQUINAS</p>
     </header>
-    <section class="flex flex-col items-center justify-center mt-[2rem] backgroundPainel w-[80%] m-auto p-[2rem] rounded-[40px] shadow-2xl ">
+    <section class="flex flex-col items-center justify-center mt-[2rem] backgroundPainel w-[90%] m-auto p-[2rem] rounded-[40px] shadow-2xl ">
         <select id="funcionario-select"
             class="mb-5 backgroundBottom rounded-[8px] h-[3rem] w-[17rem] flex text-white font-semibold">
             <option value="">SELECIONE UM FUNCIONÁRIO</option>
@@ -43,7 +80,10 @@
             </label>
         </form>
         <div class="w-1/3">
-            <select id="atributo-select" class="mt-5 custom-select multiple h-[5.5rem] w-full p-2 border border-gray-300 rounded-md bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" multiple>
+            <select id="atributo-select"
+                class="mt-5 custom-select h-16 w-full p-2 border border-gray-300 rounded-md bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                multiple>
+                <option value="" class="placeholder" disabled selected>Escolha um atributo</option>
                 <option value="Temperatura">Temperatura</option>
                 <option value="Velocidade">Velocidade</option>
                 <option value="Energia">Consumo de Energia</option>
@@ -57,26 +97,30 @@
 
         <!-- Área para notificações -->
         <div
-            class="mt-6 w-[50%] flex-col h-auto bg-white p-4 rounded-lg g-5 shadow-lg justify-center flex text-red-400">
+            class="mt-6 w-[60%] flex-col h-auto bg-white p-4 rounded-lg g-5 shadow-lg justify-center flex text-red-400">
             <div id="notificationContainer">
 
             </div>
         </div>
         <!-- Template para máquina -->
-        <template id="machineTemplate">
+        <template id="machineTemplate" >
             <div class="flex flex-col items-center bg-white text-center gap-[1rem] shadow-2xl p-5 rounded-2xl">
                 <h1 class="font-semibold text-3xl machine-id"></h1>
                 <p class="machine-status font-semibold text-xl"></p>
 
-                <div class="flex flex-row space-x-16">
-                    <p class="text-xs">Temp.</p>
-                    <p class="text-xs">Vel.</p>
-                    <p class="text-xs">Energia</p>
-                </div>
-                <div class="flex flex-row gap-[3.7rem]">
-                    <p class="p-[0.5rem] rounded-xl machine-temp"></p>
-                    <p class="p-[0.5rem] rounded-xl machine-vel"></p>
-                    <p class="p-[0.5rem] rounded-xl machine-energia"></p>
+                <div class="flex flex-col justify-center backgroundInfoMac rounded-lg p-4 gap-[2rem] shadow-lg w-[15rem]">
+                    <div class="flex flex-row gap-[1rem]">
+                        <p class="text-[1rem] text-red-400">Temp.</p>
+                        <p class="p-[0.5rem] rounded-xl machine-temp"></p>
+                    </div>
+                    <div class="flex flex-row gap-[1rem]">
+                        <p class="text-[1rem] text-red-400">Vel.</p>
+                        <p class="p-[0.5rem] rounded-xl machine-vel"></p>
+                    </div>
+                    <div class="flex flex-row gap-[1rem]">
+                        <p class="text-[1rem] text-red-400">Energia</p>
+                        <p class="p-[0.5rem] rounded-xl machine-energia"></p>
+                    </div>
                 </div>
                 <button
                     class="bg-amber-200 text-red-400 rounded-2xl p-3 w-[50%] text-sm font-bold hover:translate-y-1 border-[2px] border-black start-btn">

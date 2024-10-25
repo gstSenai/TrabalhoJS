@@ -80,3 +80,7 @@ input:focus+label::after,
 input:valid+label::after {
     transform: translateX(0%);
 }
+
+.backgroundInfoMac{
+    background-color: #d3d3d3;
+}
