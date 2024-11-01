@@ -33,8 +33,16 @@ class Maquina {
             this.temperatura = getRandomValor(40, 60);
             this.chart.series(0).points.add({ x: currentTime, y: this.temperatura });
             this.outputTemp.innerHTML = Math.ceil(this.temperatura) + "ºC";
-            this.outputTemp.style.backgroundColor = this.temperatura > 58 ? "Red" : "White";
-            this.outputTemp.style.color = this.temperatura > 58 ? "White" : "Black";
+            if (this.temperatura > 58) {
+                this.outputTemp.style.backgroundColor = "Red";
+                this.outputTemp.style.color = "White";
+            } else if (this.temperatura > 55 && this.temperatura <= 58) {
+                this.outputTemp.style.backgroundColor = "Yellow";
+                this.outputTemp.style.color = "Black";
+            } else {
+                this.outputTemp.style.backgroundColor = "White";
+                this.outputTemp.style.color = "Black";
+            }
             if (this.temperatura > 58) {
                 this.pararAtualizacao();
             }
@@ -187,7 +195,6 @@ function adicionarMaquina() {
 
     container.appendChild(clone);
 
-    // Usar a MaquinaFactory para criar a máquina
     const maquina = MaquinaFactory.criarMaquina(id, chartDiv, outputTemp, outputVelo, outputConsumo, statusDiv, atributosSelecionados);
 
     if (funcionarioResponsavel) {
@@ -202,3 +209,4 @@ function adicionarMaquina() {
 }
 
 document.getElementById('addMachineBtn').addEventListener('click', adicionarMaquina);
+
